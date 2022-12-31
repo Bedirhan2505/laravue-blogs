@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html class="h-full bg-gray-50 lang=" {{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>Welcome Laravel + Vue js + Tailwindcss</title>
 
         <!-- Fonts -->
         <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-    @vite(['resources/js/app' , 'resources/css/app'])
+    @vite(['resources/js/app.js' , 'resources/css/app.css'])
      
     </head>
-    <body class="antialiased">
+    <body class="h-full">
         <div id="app"></div>
     </body>
 </html>
