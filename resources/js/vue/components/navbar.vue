@@ -1,29 +1,20 @@
 <template>
         <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <a class="navbar-item" href="https://bulma.io">
+            <router-link :to="{name : 'Home'}" class="navbar-item">
             <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
-            </a>
-
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            </a>
+            </router-link>
         </div>
 
-        <div id="navbarBasicExample" class="navbar-menu">
-            <div class="navbar-start">
-            <router-link :to="{name : 'Home'}" class="navbar-item">Home</router-link>
-            </div>
+        <div id="navbarBasicExample" class="navbar-menu is-active">
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                    <router-link :to="{name : 'Register'}" class="button is-primary">
+                    <router-link :to="{name : 'Register'}" class="bd-tw-button button">
                         <strong>Register</strong>
                     </router-link>
-                    <router-link :to="{name : 'Login'}" class="button is-light">
-                        Login
+                    <router-link :to="{name : 'Login'}" class="bd-tw-button button">
+                        <strong>Login</strong>
                     </router-link>
                     </div>
                 </div>
@@ -36,10 +27,11 @@
 import router from '../routes';
 
 export default {
-    components: { router }
+    components: { router },
+  
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>

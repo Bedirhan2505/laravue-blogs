@@ -6,20 +6,19 @@
         <h2 class="mt-4 text-center text-3xl font-bold tracking-tight text-gray-900">Sign in to your account</h2>
         <p class="mt-2 text-center text-sm text-gray-600">
           Or
-          {{ ' ' }}
           <router-link :to="{name : 'Register'}" class="font-medium text-indigo-600 hover:text-indigo-500">start your 14-day free trial register now</router-link>
         </p>
       </div>
-      <form class="mt-8 space-y-6" action="#" method="POST">
+      <form @submit.prevent="sign" class="mt-8 space-y-6">
         <input type="hidden" name="remember" value="true" />
         <div class="-space-y-px rounded-md shadow-sm">
           <div class="mb-2">
-            <label for="email-address" class="sr-only">Email address</label>
-            <input id="email-address"  type="email"  required="" class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Email address" />
+            <label for="email" class="sr-only">Email address</label>
+            <input id="email" v-model="form.email" type="email"  required="" class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Email address" />
           </div>
           <div>
             <label for="password" class="sr-only">Password</label>
-            <input id="password" type="password"  required="" class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
+            <input id="password" v-model="form.password" type="password"  required="" class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
           </div>
         </div>
 
@@ -43,10 +42,33 @@
           </button>
         </div>
       </form>
+      <p class="text-danger">{{ error }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { LockClosedIcon } from '@heroicons/vue/20/solid'
+import { LockClosedIcon } from '@heroicons/vue/20/solid';
+import { reactive, ref } from 'vue';
+import {useRouter} from 'vue-router';
+
+import axios from 'axios';
+  let form = reactive({
+    email : '',
+    password : ''
+  });
+  let error = ref('');
+  const router = useRouter();
+  const sign = async () => {
+    await axios.post('/api/login',form)
+    .then((res)=>{
+      if(res.data.success){
+        localStorage.setItem('token',res.data.data.token);
+        error.value = res.data.message;
+        router.push({name : 'AdminHome'});
+      }else {
+        error.value = res.data.message;
+      }
+    });
+  };
 </script>
