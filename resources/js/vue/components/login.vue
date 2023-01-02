@@ -51,19 +51,20 @@
 import { LockClosedIcon } from '@heroicons/vue/20/solid';
 import { reactive, ref } from 'vue';
 import {useRouter} from 'vue-router';
-
+import {useStore } from 'vuex';
 import axios from 'axios';
   let form = reactive({
     email : '',
     password : ''
   });
+  const store = useStore ();
   let error = ref('');
   const router = useRouter();
   const sign = async () => {
     await axios.post('/api/login',form)
     .then((res)=>{
       if(res.data.success){
-        localStorage.setItem('token',res.data.data.token);
+        store.dispatch('setToken',res.data.data.token);
         error.value = res.data.message;
         router.push({name : 'AdminHome'});
       }else {

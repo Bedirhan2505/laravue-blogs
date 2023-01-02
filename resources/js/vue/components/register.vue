@@ -5,24 +5,24 @@
         <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" />
         <h2 class="mt-4 text-center text-3xl font-bold tracking-tight text-gray-900">Register Now for Free !</h2>
       </div>
-      <form class="mt-8 space-y-6" action="#" method="POST">
+      <form class="mt-8 space-y-6" @submit.prevent="register">
         <input type="hidden" name="remember" value="true" />
         <div class="-space-y-px rounded-md shadow-sm">
           <div class="mb-2">
             <label for="email-address" class="sr-only">Email address</label>
-            <input id="email-address" name="email" type="email" autocomplete="email" required="" class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Email address" />
+            <input id="email-address" v-model="form.email" name="email" type="email" autocomplete="email" required="" class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Email address" />
           </div>
           <div class="mb-2">
             <label for="name" class="sr-only">Name Surname</label>
-            <input id="name" type="text" required="" class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Name Surname" />
+            <input id="name" type="text" v-model="form.name" required="" class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Name Surname" />
           </div>
           <div class="mb-2">
             <label for="password" class="sr-only">Password</label>
-            <input id="password" type="password"  required="" class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
+            <input id="password" v-model="form.password" type="password"  required="" class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
           </div>
           <div>
             <label for="passwordr" class="sr-only">Password Repeat</label>
-            <input id="passwordr" type="password" required="" class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password Repeat" />
+            <input id="passwordr" v-model="form.passwordr" type="password" required="" class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password Repeat" />
           </div>
         </div>
 
@@ -51,5 +51,29 @@
 </template>
 
 <script setup>
-import { LockClosedIcon } from '@heroicons/vue/20/solid'
+import { LockClosedIcon } from '@heroicons/vue/20/solid';
+import { reactive } from 'vue';
+import {useRouter} from 'vue-router';
+import {useStore } from 'vuex';
+import axios from 'axios';
+
+let form = reactive({
+    email : '',
+    password : '',
+    name : '',
+    passwordr : ''
+  });
+  const store = useStore ();
+  const router = useRouter();
+
+  const register = async () => {
+    await axios.post('/api/register',form)
+    .then((res)=>{
+        store.dispatch('setToken',res.data.data.token);
+        router.push({name : 'AdminHome'});
+    })
+    .catch((e) => {
+      console.log(e.message);
+    });
+  };
 </script>

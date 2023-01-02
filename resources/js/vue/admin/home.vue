@@ -8,10 +8,12 @@
 <script setup>
 
 import {useRouter} from 'vue-router';
+import {useStore } from 'vuex';
 
+    const store = useStore (); 
     const router = useRouter();
     function logout() {
-        localStorage.removeItem('token');
+        store.dispatch('removeToken');
         router.push({name : 'Login'});
     }
 </script>
