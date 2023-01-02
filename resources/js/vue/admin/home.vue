@@ -1,7 +1,10 @@
 <template>
-  <div>
-    <h1>DASHBOARD</h1>
-    <button @click="logout" class="button is-danger mt-4 ml-4">Logout</button>
+  <div class="container mt-5">
+    <div class="columns is-vcentered">
+      <div class="column">
+        <h1>DASHBOARD</h1>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -16,6 +19,9 @@ import {useStore } from 'vuex';
         store.dispatch('removeToken');
         router.push({name : 'Login'});
     }
+
+    const showtabs = "allproduct";
+
 </script>
 
 <style>
