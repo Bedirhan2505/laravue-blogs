@@ -6,6 +6,8 @@ use Validator;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Mail;
+use App\Mail\MailResetPassword;
 
 class AuthController extends Controller
 {
@@ -43,7 +45,7 @@ class AuthController extends Controller
     public function login(Request $request){
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
             $user = Auth::user();
-            $success['token'] = $user->createToken('Myapp')->plainTextToken;
+            $success['token'] = $user->createToken('Login-Token')->plainTextToken;
             $success['name'] = $user->name;
             
             $response = [
@@ -59,6 +61,49 @@ class AuthController extends Controller
             ];
             return response()->json($response, 200);
         }
+        
+    }
+    public function resetpassword(Request $request){
+
+        $user = User::all()->where('email', $request->email)->where('name', $request->name)->first();
+        $rast = rand(1000,10000000);
+        $data = array();
+        if($user){
+            array_push($data,$user,$rast);
+            Mail::to($user->email)->send(new MailResetPassword($data));
+            $success = array();
+            array_push($success,$rast,$user->email);
+            $response = [
+                'success' => true,
+                'data' => $success,
+                'message' => 'Reset Password Succcssfuly'
+                ];
+            return response()->json($response, 200);
+        } else {
+            $response = [
+                'success' => false,
+                'message' => 'Reset Password Error ! No Account..'
+                ];
+            return response()->json($response, 200);
+        }
+        
+    }
+    public function respasstwostep(Request $request){
+
+        $user = User::all()->where('email', $request->email)->first();
+        if ( $request->password != '')
+        {
+            if($request->password == $request->passwordr){
+                $user->password = bcrypt($request->password);
+                $user->save();
+                $response = [
+                    'success' => true,
+                    'message' => 'Reset Password Succcssfuly'
+                ];
+                return response()->json($response, 200);
+            }
+        
+        }       
         
     }
 }

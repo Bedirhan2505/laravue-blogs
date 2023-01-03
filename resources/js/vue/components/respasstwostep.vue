@@ -8,7 +8,7 @@
             <span class="font-medium text-indigo-600 hover:text-indigo-500">Your password will be sent to your defined e-mail address.</span>
           </p>
         </div>
-        <form class="mt-8 space-y-6" @submit.prevent="forgotpassword">
+        <form class="mt-8 space-y-6" @submit.prevent="resetpass">
           <div class="-space-y-px rounded-md shadow-sm">
             <div class="mb-2">
               <label for="email-address" class="sr-only">Email address</label>
@@ -17,8 +17,20 @@
           </div>
           <div class="-space-y-px rounded-md shadow-sm">
             <div class="mb-2">
-              <label for="Name_Surname" class="sr-only">Name Surname</label>
-              <input id="Name_Surname" v-model="form.name"  type="text"  required="" class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Name Surname" />
+              <label for="reset_code" class="sr-only">Reset Code</label>
+              <input id="reset_code" v-model="form.code"  type="text"  required="" class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Reset Code" />
+            </div>
+          </div>
+          <div class="-space-y-px rounded-md shadow-sm">
+            <div>
+              <label for="password" class="sr-only">Password</label>
+              <input id="password" v-model="form.password" type="password"  required="" class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
+            </div>
+          </div>
+          <div class="-space-y-px rounded-md shadow-sm">
+            <div>
+              <label for="passwordr" class="sr-only">Password Repeat</label>
+              <input id="passwordr" v-model="form.passwordr" type="password"  required="" class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password Repeat" />
             </div>
           </div>
           <div>
@@ -43,22 +55,26 @@
 
   let form = reactive({
     email : '',
-    name : ''
+    code : '',
+    password : '',
+    passwordr : ''
   });
   const { cookies } = useCookies();
   const  router  = useRouter();
-  const forgotpassword = async () => {
-    await axios.post('/api/resetpassword',form)
-    .then((res)=>{
-      if(res.data.success){
-          if(cookies.set(res.data.data[1],res.data.data[0])){
-            router.push({ name : 'respasstwostep'});
-          }else {
-            console.log("Cookies not created !!");
-          }  
-      }else {
-        console.log(res.data.message);
-      }
-    });
+  const resetpass = async () => {
+    if(cookies.get(form.email) == form.code){
+      await axios.post('/api/respasstwostep',form)
+      .then((res)=>{
+        if(res.data.success){
+          cookies.remove(form.email);
+          console.log("Parolanız Değiştirilmiştir.");
+          router.push({name : 'Login'});
+        }else {
+          console.log(res.data.message);
+        }
+      });
+    } else {
+      console.log("Email and code do not match !!")
+    }  
   };
   </script>
