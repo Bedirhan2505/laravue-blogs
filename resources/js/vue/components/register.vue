@@ -70,7 +70,7 @@ let form = reactive({
     await axios.post('/api/register',form)
     .then((res)=>{
         store.dispatch('setToken',res.data.data.token);
-        router.push({name : 'AdminHome'});
+        router.push({name : 'dashboard'});
     })
     .catch((e) => {
       console.log(e.message);

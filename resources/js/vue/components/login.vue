@@ -66,7 +66,7 @@ import axios from 'axios';
       if(res.data.success){
         store.dispatch('setToken',res.data.data.token);
         error.value = res.data.message;
-        router.push({name : 'AdminHome'});
+        router.push({name : 'dashboard'});
       }else {
         error.value = res.data.message;
       }
