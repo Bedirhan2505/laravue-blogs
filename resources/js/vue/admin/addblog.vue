@@ -5,9 +5,16 @@
             <h3 class="text-lg font-medium leading-6 text-gray-900">Blog Details</h3>
             <p class="mt-1 max-w-2xl text-sm text-gray-500">You Can Create a New Blog By Entering Blog Details.</p>
         </div>
-        <form @submit.prevent="addblog">
+        <form content-type="multipart/form-data" @submit.prevent="addblog">
             <div class="border-t border-gray-200">
                 <dl>
+                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                     <dt class="text-sm font-medium text-gray-500">Select Category</dt>
+                     <select v-model="form.selected" class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0" id="category" name="category">
+                        <option disabled value="">Please select one</option>
+                        <option v-for="selectcat in selectcategory" :key="selectcat.id" :value="selectcat.id">{{selectcat.name}}</option>
+                     </select>
+                </div>
                 <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm font-medium text-gray-500">Title</dt>
                     <input type="text" v-model="form.title" name="title" id="title" placeholder="Title" class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
@@ -55,22 +62,43 @@
   
   <script setup>
   import { PaperClipIcon } from '@heroicons/vue/20/solid';
-  import { reactive , ref } from 'vue';
+  import axios from 'axios';
+  import { reactive , ref , onMounted } from 'vue';
 
     const form = reactive({
         title : '',
         desc : '',
-        content : ''
+        content : '',
+        selected : ''
     });
-    const file = ref(null);
-    const addblog = async () => {
-       //
-    } 
-    function onFileChanged($event) {
-            const target = $event.target;
-            if (target && target.files) {
-                file.value = target.files[0];
-            }
+    const selectcategory = ref(null);
+    const file = ref([]);
+    const onFileChanged = (e) => {
+            file.value = e.target.files[0];
             console.log(file);
-        }
+    };
+
+    const addblog = async (e) => {
+        e.preventDefault();
+        
+        await axios.post('/api/addblog',form,file.value)
+        .then((res) => {
+            console.log(res.data.data);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    };
+
+    onMounted(async () => {
+        await axios.post('/api/listencategory')
+        .then((res) => {
+            selectcategory.value = res.data.data; 
+            console.log(selectcategory.value);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    });
+    
   </script>

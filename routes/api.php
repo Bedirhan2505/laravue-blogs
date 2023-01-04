@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\CategoriesController;
+use App\Http\Controllers\API\BlogsController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,4 +25,14 @@ Route::controller(AuthController::class)->group(function(){
     Route::post('register', 'register');
     Route::post('resetpassword', 'resetpassword');
     Route::post('respasstwostep', 'respasstwostep');
+});
+
+Route::controller(CategoriesController::class)->group(function(){
+
+    Route::post('listencategory','listencategory');
+});
+
+Route::controller(BlogsController::class)->group(function(){
+
+    Route::post('addblog','addblog');
 });
