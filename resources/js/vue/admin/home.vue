@@ -1,22 +1,14 @@
 <template>
-    
+  <navbar_user /> 
   <router-view></router-view>
-  <footer class="footer">
-  <div class="content has-text-centered">
-    <p>
-      <strong>Bulma</strong> by <a href="https://jgthms.com">Jeremy Thomas</a>. The source code is licensed
-      <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
-      is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
-    </p>
-  </div>
-</footer>
+  <Adminfooter />
 </template>
 
 <script setup>
-
+import navbar_user from './navbar_user.vue';
 import {useRouter} from 'vue-router';
 import {useStore } from 'vuex';
-
+import Adminfooter from './footer.vue';
     const store = useStore (); 
     const router = useRouter();
     function logout() {

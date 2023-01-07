@@ -48,6 +48,8 @@
 </template>
 
 <script setup>
+import { toast } from 'vue3-toastify';
+import '../../../../node_modules/vue3-toastify/dist/index.css';
 import { LockClosedIcon } from '@heroicons/vue/20/solid';
 import { reactive, ref } from 'vue';
 import {useRouter} from 'vue-router';
@@ -63,11 +65,22 @@ import axios from 'axios';
   const sign = async () => {
     await axios.post('/api/login',form)
     .then((res)=>{
-      if(res.data.success){
+      if(res.data.success){         
+          toast.success("Login successful you are redirected to dashboard",{
+          autoClose: 3000,
+          position: toast.POSITION.TOP_RIGHT,
+        });
         store.dispatch('setToken',res.data.data.token);
         error.value = res.data.message;
-        router.push({name : 'dashboard'});
+        setTimeout(() => {
+          router.push({name : 'dashboard'});
+        },3000);
+        
       }else {
+        toast.warn("Login Failed Please Try Again...",{
+          autoClose: 4000,
+          position: toast.POSITION.TOP_RIGHT,
+        });
         error.value = res.data.message;
       }
     });
