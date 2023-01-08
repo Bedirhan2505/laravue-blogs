@@ -2,9 +2,14 @@
   <div class="container is-max-desktop mt-5">
     <ul class="card-wrapper">
       <li class="card" v-for="blog in bloglist" :key="blog.created_at">
+            <footer class="card-footer">
+              <router-link class="card-footer-item" :to="{name : 'blogdetails' , params : { slug : blog.slug }}">View</router-link>
+              <router-link class="card-footer-item" :to="{name : 'blogdetails' , params : { slug : blog.slug }}">Edit</router-link>
+              <router-link class="card-footer-item" :to="{name : 'blogdetails' , params : { slug : blog.slug }}">Delete</router-link>
+            </footer>
         <img :src="blog.image" alt=''>
-        <h3><a href="">{{ blog.title }}</a></h3>
-        <p>{{blog.desc}}</p>
+        <h3 class="ml-1"> {{ blog.title }} </h3>
+        <p class="ml-2"><br>{{blog.desc}}</p>
       </li>
     </ul>
   </div>
@@ -19,7 +24,6 @@ const bloglist = ref([]);
         await axios.post('/api/blogslist')
         .then((res) => {
             bloglist.value = res.data.data; 
-            console.log(bloglist.value);
         })
         .catch((err) => {
             console.log(err);
@@ -30,10 +34,8 @@ const bloglist = ref([]);
 <style scoped>
 .card {
   --card-gradient: rgba(0, 0, 0, 0.8);
-  --card-gradient: #5e9ad9, #e271ad;
- 
-  --card-blend-mode: overlay;
-  
+  --card-gradient: #5e9ad9, #0c2746;
+
 
   background-color: #fff;
   border-radius: 0.5rem;
@@ -48,11 +50,9 @@ const bloglist = ref([]);
 img {
     border-radius: 0.5rem 0.5rem 0 0;
     width: 100%;
-    object-fit: cover;
    
     max-height: max(10rem, 30vh);
     aspect-ratio: 4/3;
-    mix-blend-mode: var(--card-blend-mode);
    
 }
 
@@ -84,9 +84,11 @@ body {
 }
 
 .card a {
-  color: inherit;
+  color: white;
 }
-
+.card a:hover {
+  background: #0c2746;
+}
 .card-wrapper {
   list-style: none;
   padding: 0;

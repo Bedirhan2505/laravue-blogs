@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Blogs;
 use App\Models\Categories;
+use App\Models\User;
 use Auth;
 use Log;
 use Str;
@@ -50,6 +51,7 @@ class BlogsController extends Controller
             $categories= Categories::where("id",$getblog->category_id)->first();
             $imagelink = Storage::url('images/'.$getblog->image);
             array_push($data,[
+                "slug" => $getblog->slugs,
                 "title" => $getblog->title,
                 "desc" => $getblog->description,
                 "image" => $imagelink,
@@ -75,5 +77,34 @@ class BlogsController extends Controller
             return response()->json($response, 200);
         }
     }
-    
+    public function blogsdetails(Request $request){
+        $slug=$request->slug;
+        $data = array();
+        $blogs = Blogs::where('slugs','=',$slug)->first();
+        if($blogs){
+            $categories= Categories::where("id",$blogs->category_id)->first();
+            $author= User::where("id",$blogs->author_id)->first();
+            $imagelink = Storage::url('images/'.$blogs->image);
+            array_push($data,[
+                "title" => $blogs->title,
+                "desc" => $blogs->description,
+                "image" => $imagelink,
+                "content" => $blogs->content,
+                "created_at" => $blogs->created_at->format('d/m/Y H:i:s'),
+                "categories" => $categories->name,
+                "author" => $author->name
+            ]);  
+            $response = [
+                "success" => true,
+                "message" => "Blog Detail Successfuly",
+                "data" => $data
+            ];
+        } else {
+            $response = [
+                "success" => false,
+                "message" => "Blog Detail Error !",
+            ];
+        }
+        return response()->json($response, 200);
+    }
 }

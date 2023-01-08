@@ -9,7 +9,7 @@ import AdminHome from '../admin/home.vue';
     import allblogs from '../admin/allblogs.vue';
     import dashboard from '../admin/dashboard.vue';
     import addblog from '../admin/addblog.vue';
-
+    import blogdetails from '../admin/blogdetails.vue';
 const routes = [
     {path : '/', name : 'Home', component : home , meta : { requireAuth : false }},
     {path : '/login', name : 'Login', component : login, meta : { requireAuth : false }},
@@ -17,13 +17,11 @@ const routes = [
     {path : '/forgotpassword', name : 'ForgotPassword', component : forgotpassword, meta : { requireAuth : false }},
     {path : '/respasstwostep', name : 'respasstwostep', component : respasstwostep, meta : { requireAuth : false }},
     
-    {path : '/Home', 
-    name : 'AdminHome', 
-    component : AdminHome, 
-    meta : { requireAuth : true },
+    {path : '/Home', name : 'AdminHome', component : AdminHome, meta : { requireAuth : true },
         children : [
             {name : 'dashboard',path:  'dashboard',component: dashboard},
-            {name : 'allblogs',path:  'allblogs',component: allblogs},
+            {name : 'allblogs',path:  'allblogs',component: allblogs,},
+            {name : 'blogdetails', path: 'blogdetails/:slug', component: blogdetails},
             {name : 'addblog',path:  'addblog',component: addblog},
         ],
     },

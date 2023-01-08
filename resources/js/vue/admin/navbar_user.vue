@@ -17,9 +17,8 @@
             </div>
             <div class="hidden sm:ml-6 sm:block">
               <div class="flex space-x-4">
-                <router-link :to="{name : 'dashboard'}">Dashboard</router-link>
-                <router-link :to="{name : 'allblogs'}">All Blogs</router-link>
-                <router-link :to="{name : 'addblog'}">Add Blog</router-link>
+                <router-link v-for="item in navigation" :key="item.name" :to="{name : item.href }" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']">{{item.name}}</router-link>
+              
               </div>
             </div>
           </div>
@@ -74,5 +73,10 @@
         store.dispatch('removeToken');
         router.push({name : 'Login'});
     };
+    const navigation = [
+  { name: 'Dashboard', href: 'dashboard', current: true },
+  { name: 'AllBlogs', href: 'allblogs', current: false },
+  { name: 'AddBlog', href: 'addblog', current: false },
+  ];
 
   </script>
