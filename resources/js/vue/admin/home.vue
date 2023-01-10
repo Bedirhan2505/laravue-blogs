@@ -5,6 +5,7 @@
 </template>
 
 <script setup>
+
 import navbar_user from './navbar_user.vue';
 import {useRouter} from 'vue-router';
 import {useStore } from 'vuex';

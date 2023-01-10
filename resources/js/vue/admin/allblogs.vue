@@ -1,7 +1,6 @@
 <template>
-  <div class="container is-max-desktop mt-5">
-    <ul class="card-wrapper">
-      <div v-if="bloglist.length != 0">
+  <div class="container is-max-desktop mt-5" v-if="bloglist.length != 0">
+    <ul class="card-wrapper" >
       <li class="card" v-for="blog in bloglist" :key="blog.created_at">
             <footer class="card-footer">
               <router-link class="card-footer-item" :to="{name : 'blogdetails' , params : { slug : blog.slug }}">View</router-link>
@@ -9,14 +8,13 @@
               <a @click="deleteModal(blog.id)" class="card-footer-item">Delete</a>
             </footer>
         <img :src="blog.image" alt=''>
-        <h3 class="ml-1"> {{ blog.title }} </h3>
-        <p class="ml-2"><br>{{blog.desc}}</p>
+        <h3 class="ml-1"> {{ blog.title.substring(0,29) }} ... </h3>
+        <p class="ml-2"><br>{{blog.desc.substring(0,250)}} ...</p>
       </li>
-      </div>
-      <div class="container" v-else>
-        <h3>No Records Found</h3>
-      </div>
     </ul>
+  </div>
+  <div class="container" v-else>
+        <h3>No Records Found</h3>
   </div>
   <vue-final-modal v-model="showModal3" classes="modal-container" content-class="modal-content">
         <button class="modal__close" @click="modalback">X</button>
