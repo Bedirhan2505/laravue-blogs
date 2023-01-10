@@ -37,4 +37,5 @@ Route::controller(BlogsController::class)->group(function(){
     Route::post('addblog','addblog');
     Route::post('blogslist','blogslist');
     Route::post('blogsdetails','blogsdetails');
+    Route::post('blogdelete','blogdelete');
 });

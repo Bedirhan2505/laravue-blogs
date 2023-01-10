@@ -23,11 +23,6 @@
         </div>
 
         <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-            <label for="remember-me" class="ml-2 block text-sm text-gray-900">Remember me</label>
-          </div>
-
           <div class="text-sm">
             <router-link :to="{name : 'ForgotPassword'}" class="font-medium text-indigo-600 hover:text-indigo-500">Forgot your password?</router-link>
           </div>
@@ -71,7 +66,6 @@ import axios from 'axios';
           position: toast.POSITION.TOP_RIGHT,
         });
         store.dispatch('setToken',res.data.data.token);
-        error.value = res.data.message;
         setTimeout(() => {
           router.push({name : 'dashboard'});
         },3000);

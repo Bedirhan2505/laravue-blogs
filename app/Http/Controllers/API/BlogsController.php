@@ -51,6 +51,7 @@ class BlogsController extends Controller
             $categories= Categories::where("id",$getblog->category_id)->first();
             $imagelink = Storage::url('images/'.$getblog->image);
             array_push($data,[
+                "id" => $getblog->id,
                 "slug" => $getblog->slugs,
                 "title" => $getblog->title,
                 "desc" => $getblog->description,
@@ -86,6 +87,7 @@ class BlogsController extends Controller
             $author= User::where("id",$blogs->author_id)->first();
             $imagelink = Storage::url('images/'.$blogs->image);
             array_push($data,[
+                "id" => $blogs->id,
                 "title" => $blogs->title,
                 "desc" => $blogs->description,
                 "image" => $imagelink,
@@ -106,5 +108,29 @@ class BlogsController extends Controller
             ];
         }
         return response()->json($response, 200);
+    }
+    public function blogdelete(Request $request){
+        $id = $request->id;
+        
+        $blog = Blogs::find($id);
+        
+        $image = $blog->image;
+        
+        $imagedelete = Storage::disk('public')->delete('images/'.$image);
+            if($imagedelete ){
+                $blog->delete();
+                $response = [
+                    "success" => true,
+                    "message" => "Blog Delete Successfuly"
+                ];
+                return response()->json($response, 200);
+            } else {
+                $response = [
+                    "success" => false,
+                    "message" => "Image Not Deleted!"
+                ];
+                return response()->json($response, 200);
+            }
+        
     }
 }

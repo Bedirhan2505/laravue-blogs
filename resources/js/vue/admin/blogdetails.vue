@@ -1,11 +1,10 @@
 <template>
   <div class="container is-desktop mt-5">
-    <div class="card" v-for="blog in bloglist" :key="blog.title">
+    <div class="card" v-for="blog in bloglist" :key="blog.id">
       <div class="card-menu">
         <div class="card-footer">
         <a @click="back" class="card-footer-item">Back</a>
-        <a class="card-footer-item">Edit</a>
-        <a @click="showModal2 = true" class="card-footer-item">Delete</a>
+        <a @click="deleteModal(blog.id)" class="card-footer-item">Delete</a>
         </div>
       </div>
       <div class="card-image">
@@ -38,7 +37,7 @@
         </p>
         <div class="modal__action">
         <button class="button is-danger" @click="modalnext">OK !</button> 
-        <button class="button is-primary ml-2" @click="modalback"> Cancel !</button>
+        <button class="button is-primary ml-2" @click="modalback"> Cancel</button>
       </div>
       </div>
     </vue-final-modal>
@@ -57,15 +56,35 @@ import { VueFinalModal, ModalsContainer} from 'vue-final-modal';
   });
   let bloglist = ref([]);
   let showModal2 = ref(false);
+  const blogid = reactive({
+    "id" : null,
+  });
 
-  const modalnext = () => {
-        showModal2.value = false;
-        router.go(router.currentRoute);
+  const modalnext =async () => {
+       if(blogid.id != null) {
+          await axios.post('/api/blogdelete',blogid)
+            .then((res) => {
+                if(res.data.success == true){
+                  showModal2.value= false;
+                  back();
+                } else{
+                  showModal2.value= true;
+                  console.log(res.data.message);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            }); 
+        }  
     };
   const modalback = () => {
         showModal2.value = false;
     };
 
+  const deleteModal = (id) => {
+      showModal2.value= true;
+      blogid.id = id ;
+  };
 
   function back() {
     router.go(-1)
