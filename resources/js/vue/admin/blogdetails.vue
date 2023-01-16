@@ -96,7 +96,7 @@ import { VueFinalModal, ModalsContainer} from 'vue-final-modal';
         .then((res) => {
             if(res.data.success == true){
               bloglist.value = res.data.data;
-              console.log(bloglist.value);
+             
             } else{
               router.go(-1);
               console.log(res.data.message);

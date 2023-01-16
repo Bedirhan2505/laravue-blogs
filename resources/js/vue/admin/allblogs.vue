@@ -4,7 +4,6 @@
       <li class="card" v-for="blog in bloglist" :key="blog.created_at">
             <footer class="card-footer">
               <router-link class="card-footer-item" :to="{name : 'blogdetails' , params : { slug : blog.slug }}">View</router-link>
-              <router-link class="card-footer-item" :to="{name : 'blogdetails' , params : { slug : blog.slug }}">Edit</router-link>
               <a @click="deleteModal(blog.id)" class="card-footer-item">Delete</a>
             </footer>
         <img :src="blog.image" alt=''>
